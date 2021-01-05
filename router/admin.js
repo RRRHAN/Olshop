@@ -1,5 +1,6 @@
 const express = require("express"),
-    app = express()
+    app = express(),
+    md5 = require('md5')
 
 module.exports = app
 
@@ -11,7 +12,7 @@ app.post("/", (req, res) => {
     let data = {
         nama_admin: req.body.nama_admin,
         username: req.body.username,
-        password: req.body.passworde
+        password: md5(req.body.password)
     }
 
     // create sql insert
@@ -33,14 +34,14 @@ app.put("/:id", (req, res) => {
         sql = null
         // paramter perubahan data
     let param = {
-        kode_admin: req.params.id
+        id_admin: req.params.id
     }
 
     // jika mengirim file = update data + reupload
     data = {
         nama_admin: req.body.nama_admin,
         username: req.body.username,
-        password: req.body.passworde
+        password: md5(req.body.password)
     }
 
     // create sql update
@@ -63,7 +64,7 @@ app.put("/:id", (req, res) => {
 // endpoint untuk menghapus data admin
 app.delete("/:kode_admin", (req, res) => {
     let param = {
-        kode_admin: req.params.kode_admin
+        id_admin: req.params.kode_admin
     }
 
     // create sql delete
@@ -83,10 +84,10 @@ app.delete("/:kode_admin", (req, res) => {
     })
 })
 
-// endpoint ambil data barang
+// endpoint ambil data admin
 app.get("/", (req, res) => {
     // create sql query
-    let sql = "select * from barang"
+    let sql = "select * from admin"
 
     // run query
     db.query(sql, (error, result) => {

@@ -80,10 +80,10 @@ app.delete("/:kode_transaksi", (req, res) => {
     })
 })
 
-// endpoint ambil data barang
+// endpoint ambil data transaksi
 app.get("/", (req, res) => {
     // create sql query
-    let sql = "select * from barang"
+    let sql = "select * from transaksi"
 
     // run query
     db.query(sql, (error, result) => {

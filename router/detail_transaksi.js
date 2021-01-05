@@ -33,7 +33,7 @@ app.put("/:id", (req, res) => {
         sql = null
         // paramter perubahan data
     let param = {
-        kode_detail_transaksi: req.params.id,
+        id_detail_transaksi: req.params.id,
     }
 
     // jika mengirim file = update data + reupload
@@ -64,7 +64,7 @@ app.put("/:id", (req, res) => {
 // endpoint untuk menghapus data detail_transaksi
 app.delete("/:kode_detail_transaksi", (req, res) => {
     let param = {
-        kode_detail_transaksi: req.params.kode_detail_transaksi,
+        id_detail_transaksi: req.params.kode_detail_transaksi,
     }
 
     // create sql delete
@@ -84,10 +84,10 @@ app.delete("/:kode_detail_transaksi", (req, res) => {
     })
 })
 
-// endpoint ambil data barang
+// endpoint ambil data detail_transaksi
 app.get("/", (req, res) => {
     // create sql query
-    let sql = "select * from barang"
+    let sql = "select * from detail_transaksi"
 
     // run query
     db.query(sql, (error, result) => {

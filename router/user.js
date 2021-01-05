@@ -24,12 +24,12 @@ let upload = multer({
 let db = require('./db_connect')
 
 // endpoint untuk menambah data user baru
-app.post("/", upload.single("image"), (req, res) => {
+app.post("/", upload.single("foto"), (req, res) => {
     // prepare data
     let data = {
         nama_user: req.body.nama_user,
         alamat: req.body.alamat,
-        image: req.body.filename,
+        foto: req.file.filename,
         username: req.body.username,
         password: md5(req.body.password)
     }
@@ -48,40 +48,40 @@ app.post("/", upload.single("image"), (req, res) => {
 })
 
 // endpoint untuk mengubah data user
-app.put("/:id", upload.single("image"), (req, res) => {
+app.put("/:id", upload.single("foto"), (req, res) => {
     let data = null,
         sql = null
         // paramter perubahan data
     let param = {
-        kode_user: req.params.id
+        id_user: req.params.id
     }
 
     // jika mengirim file = update data + reupload
     if (!req.file) {
         // jika tidak ada file yang dikirim = update data saja
         data = {
-            nama_barang: req.body.nama_barang,
-            harga: req.body.harga,
-            stok: req.body.stok,
-            deskripsi: req.body.deskripsi
+            nama_user: req.body.nama_user,
+            alamat: req.body.alamat,
+            username: req.body.username,
+            password: md5(req.body.password)
         }
-    } else {
+    } else if (req.file) {
         // jika mengirim file = update data + reupload
         data = {
-            nama_barang: req.body.nama_barang,
-            harga: req.body.harga,
-            stok: req.body.stok,
-            deskripsi: req.body.deskripsi,
-            image: req.file.filename
+            nama_user: req.body.nama_user,
+            alamat: req.body.alamat,
+            foto: req.file.filename,
+            username: req.body.username,
+            password: md5(req.body.password)
         }
 
         // get data yg akan diupdate utk mendapatkan nama file yang lama
-        sql = "select * from barang where ?"
+        sql = "select * from user where ?"
             // run query
         db.query(sql, param, (err, result) => {
             if (err) throw err
                 // tampung nama file yang lama
-            let fileName = result[0].image
+            let fileName = result[0].foto
 
             // hapus file yg lama
             let dir = path.join(__dirname, "..", "image", "user", fileName)
@@ -107,9 +107,9 @@ app.put("/:id", upload.single("image"), (req, res) => {
 })
 
 // endpoint untuk menghapus data user
-app.delete("/:kode_user", (req, res) => {
+app.delete("/:id_user", (req, res) => {
     let param = {
-        kode_user: req.params.kode_user
+        id_user: req.params.id_user
     }
 
     // ambil data yang akan dihapus
@@ -119,7 +119,7 @@ app.delete("/:kode_user", (req, res) => {
         if (error) throw error
 
         // tampung nama file yang lama
-        let fileName = result[0].image
+        let fileName = result[0].foto
 
         // hapus file yg lama
         let dir = path.join(__dirname, "..", "image", "user", fileName)
@@ -145,10 +145,10 @@ app.delete("/:kode_user", (req, res) => {
 
 })
 
-// endpoint ambil data barang
+// endpoint ambil data user
 app.get("/", (req, res) => {
     // create sql query
-    let sql = "select * from barang"
+    let sql = "select * from user"
 
     // run query
     db.query(sql, (error, result) => {
